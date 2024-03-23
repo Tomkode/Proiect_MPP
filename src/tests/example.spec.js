@@ -92,7 +92,7 @@ test("check edit go back", async ({page}) => {
 // test("check edit", async ({page}) => {
 //     await page.goto('localhost:5173/desserts')
 
-//     await page.getByText("Frozen Yoghurt").click();
+//     await page.getByText("Frozen yoghurt").click();
 
 //     await expect(page.getByText('Edit Entity')).toBeVisible();
 //     await expect(page.getByRole('button', { name: 'Edit Entity' }) ).toBeVisible();

@@ -110,6 +110,25 @@ let initialState = returnEntities();
     setEntities(newEntities)
     closeButtonClicked()
   };
+
+  const [tablePages, setTablePages] = useState({
+    itemsPerPage: 2,
+    currentPage: 1
+  })
+  const nextPage = () => {
+    if(tablePages.currentPage * tablePages.itemsPerPage < entities.length){
+    let newTablePages = {...tablePages}
+    newTablePages.currentPage += 1
+    setTablePages(newTablePages)
+    }
+  }
+  const prevPage = () => {
+    if(tablePages.currentPage > 1){
+    let newTablePages = {...tablePages}
+    newTablePages.currentPage -= 1
+    setTablePages(newTablePages)
+    }
+  }
   const router = createBrowserRouter([
     {
       path: "/",
@@ -117,7 +136,7 @@ let initialState = returnEntities();
     },
     {
       path: "desserts",
-      element: <App viewState={viewState} entities = {entities} rowClicked = {rowClicked} />,
+      element: <App viewState={viewState} entities = {entities} rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
     },
     {
       path: "dessert/add",

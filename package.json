@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.12",
     "@mui/styled-engine-sc": "^6.0.0-alpha.17",
+    "@mui/x-charts": "^7.0.0",
     "@playwright/test": "^1.42.1",
     "@reduxjs/toolkit": "^2.2.1",
     "playwright": "^1.42.1",

@@ -12,8 +12,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-export default function DenseTable({state, view, rowClicked}) {
+export default function DenseTable({state, view, rowClicked, pageState}) {
   const navigate = useNavigate();
+  const currentPage = pageState.currentPage;
+  const pageLength = pageState.itemsPerPage;
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 400 }} size="small" aria-label="a dense table">
@@ -27,14 +29,16 @@ export default function DenseTable({state, view, rowClicked}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {state.sort((ob1,ob2) => ob1.calories - ob2.calories).map((row, index) => (
+          {state.sort((ob1,ob2) => ob1.calories - ob2.calories).filter( (row, index) => {
+            return index >= (currentPage-1) * pageLength && index < currentPage * pageLength
+          }).map((row, index) => (
             
             <TableRow 
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 },
             '&:hover': {cursor: 'pointer'} }}
               onClick = { () => {
-                rowClicked(index);
+                rowClicked(index + (currentPage-1) * pageLength);
                 navigate('/dessert/details')} }
             >
               <TableCell component="th" scope="row">

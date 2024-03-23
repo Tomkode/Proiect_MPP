@@ -16,6 +16,7 @@ export const AddButton = styled.button`
     outline: none;
     border: none;
     height: 5vh;
+    margin: 5px;
     &:hover{
         background-color: #888888;
         transition: 1s;
