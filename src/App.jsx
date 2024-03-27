@@ -11,7 +11,7 @@ import { AddButton } from './components/AddButton'
 import {Link} from 'react-router-dom'
 import { PieChart } from '@mui/x-charts/PieChart';
 
-function App({entities, viewState, rowClicked, increasePage, decreasePage, pageState}) {
+function App({entities, viewState, rowClicked, increasePage, decreasePage, pageState, updateItemsPerPage}) {
   // -------------- The state with the table entries
   console.log(pageState)
   let chartData = []
@@ -31,6 +31,10 @@ function App({entities, viewState, rowClicked, increasePage, decreasePage, pageS
     <p> Current page : {pageState.currentPage}</p>
     <AddButton onClick = {decreasePage}>Previous Page</AddButton>
     <AddButton onClick = {increasePage} >Next Page</AddButton>
+    <br></br>
+    Items per Page:
+    <br></br> 
+    <input type="number" id="itemsPerPage" onChange ={updateItemsPerPage} defaultValue = {pageState.itemsPerPage} ></input>
     <PieChart
   series={[
     {

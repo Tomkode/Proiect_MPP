@@ -129,6 +129,12 @@ let initialState = returnEntities();
     setTablePages(newTablePages)
     }
   }
+  const updateItemsPerPage = (evt) => {
+    let newTablePages = {...tablePages}
+    newTablePages.itemsPerPage = evt.currentTarget.value
+    newTablePages.currentPage = 1
+    setTablePages(newTablePages)
+  }
   const router = createBrowserRouter([
     {
       path: "/",
@@ -136,7 +142,7 @@ let initialState = returnEntities();
     },
     {
       path: "desserts",
-      element: <App viewState={viewState} entities = {entities} rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
+      element: <App updateItemsPerPage = {updateItemsPerPage} viewState={viewState} entities = {entities} rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
     },
     {
       path: "dessert/add",
