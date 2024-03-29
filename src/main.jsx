@@ -4,23 +4,20 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import {GreetPage} from "./components/GreetPage";
 import AddEntityPage from "./components/AddEntityPage";
-import store from './store'
+// import store from './store'
 import { Provider } from 'react-redux'
-import { returnEntities } from "./Service";
 import {useState} from 'react'
-import { createData } from "./Service";
 import { StyledView } from "./components/StyledView";
 import {redirect} from 'react-router-dom'
 import { EditPanel } from "./components/EditPanel";
 
-let initialState = returnEntities();
 //console.log(initialState)
   const Main = () => {
 
     
     
   
-  const [entities, setEntities] = useState(initialState)
+  const [entities, setEntities] = useState([])
   //console.log(entities)
   const addEntity = (name, calories, fat, carbs, protein) => {
     // let entry = { 
@@ -142,7 +139,8 @@ let initialState = returnEntities();
     },
     {
       path: "desserts",
-      element: <App updateItemsPerPage = {updateItemsPerPage} viewState={viewState} entities = {entities} rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
+      element: <App updateItemsPerPage = {updateItemsPerPage} viewState={viewState} entities = {entities} setEntities = {setEntities}
+      rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
     },
     {
       path: "dessert/add",

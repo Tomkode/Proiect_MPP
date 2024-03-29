@@ -2,7 +2,7 @@ import {styled} from "styled-components";
 import { StyledBox } from "./StyledView";
 import { AddButton } from "./AddButton";
 import {Link} from 'react-router-dom'
-import { update } from "../viewSlice";
+// import { update } from "../viewSlice";
 
 
 const SubmitButton = styled(AddButton)`

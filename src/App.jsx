@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import DenseTable from './components/DenseTable'
 import {StyledView} from './components/StyledView'
-import {returnEntities} from './Service'
 import './App.css'
 import './index.css'
 import CenteredContainer from './components/CenteredContainer'
@@ -11,9 +10,23 @@ import { AddButton } from './components/AddButton'
 import {Link} from 'react-router-dom'
 import { PieChart } from '@mui/x-charts/PieChart';
 
-function App({entities, viewState, rowClicked, increasePage, decreasePage, pageState, updateItemsPerPage}) {
+function App({entities, setEntities, viewState, rowClicked, increasePage, decreasePage, pageState, updateItemsPerPage}) {
   // -------------- The state with the table entries
-  console.log(pageState)
+  //console.log(pageState)
+  useEffect( () => {
+    async function f(){
+      await fetch('http://localhost:5123/desserts')
+      .then((response) => response.json())
+      .then( (data) => {
+        console.log(data)
+        setEntities(data)
+      
+      }, (error) => {
+        console.log(error)
+      })
+    }
+    f();
+  }, [])
   let chartData = []
   for(let i = 0; i < entities.length; i++){
     chartData.push({
@@ -23,6 +36,18 @@ function App({entities, viewState, rowClicked, increasePage, decreasePage, pageS
     
     })
   }
+  useEffect(() => {
+    // Fetch data from the backend
+    
+    fetch('http://localhost:5123/')
+      .then(response => response.text())
+      .then((data) => {
+        console.log(data);
+      }, (error) => {
+        console.log(error);
+      });
+    
+  }, []);
   return (
     <CenteredContainer>
     <h1> Nutritional Information</h1>
