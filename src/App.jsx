@@ -9,24 +9,52 @@ import CenteredContainer from './components/CenteredContainer'
 import { AddButton } from './components/AddButton'
 import {Link} from 'react-router-dom'
 import { PieChart } from '@mui/x-charts/PieChart';
-
+import { legendClasses } from '@mui/x-charts'
+import {io} from 'socket.io-client'
+const socket = io('http://localhost:5123', {
+  transports: ['websocket'],
+  autoConnect: false
+})
+socket.open()
 function App({entities, setEntities, viewState, rowClicked, increasePage, decreasePage, pageState, updateItemsPerPage}) {
   // -------------- The state with the table entries
   //console.log(pageState)
+  const [generating, setGenerating] = useState(false)
   useEffect( () => {
     async function f(){
       await fetch('http://localhost:5123/desserts')
+      
       .then((response) => response.json())
       .then( (data) => {
-        console.log(data)
         setEntities(data)
       
-      }, (error) => {
-        console.log(error)
       })
+      .catch((error) => {alert("A server error occured")})
     }
     f();
   }, [])
+  useEffect(() => {
+    
+    socket.on("generated", () => {
+      fetch('http://localhost:5123/desserts')
+      .then((response) => response.json())
+      .then( (data) => {
+        
+        setEntities(data)
+        
+      })
+      .catch((error) => {alert("A server error occured")})
+    })
+  }, []);
+  // socket.emit("asd");
+  const toggleGeneration = () => {
+    if(generating == true){
+      socket.emit("stopgenerating")
+    }else{
+      socket.emit("startgenerating")
+    }
+    setGenerating(!generating)
+  }
   let chartData = []
   for(let i = 0; i < entities.length; i++){
     chartData.push({
@@ -36,18 +64,7 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     
     })
   }
-  useEffect(() => {
-    // Fetch data from the backend
-    
-    fetch('http://localhost:5123/')
-      .then(response => response.text())
-      .then((data) => {
-        console.log(data);
-      }, (error) => {
-        console.log(error);
-      });
-    
-  }, []);
+
   return (
     <CenteredContainer>
     <h1> Nutritional Information</h1>
@@ -60,6 +77,8 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     Items per Page:
     <br></br> 
     <input type="number" id="itemsPerPage" onChange ={updateItemsPerPage} defaultValue = {pageState.itemsPerPage} ></input>
+    <br></br>
+    <AddButton onClick={toggleGeneration}>Generation: { generating === true? 'ON' : 'OFF'}</AddButton>
     <PieChart
   series={[
     {
@@ -67,8 +86,17 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     },
   ]}
   
-  width={600}
+  width={400}
   height={200}
+  margin = {{right: 50, left: 50}}
+  slotProps = {
+    {
+      legend: {
+        hidden: true,
+      }
+    }
+  
+  }
 />
     </CenteredContainer>
   )

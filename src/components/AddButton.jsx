@@ -20,5 +20,6 @@ export const AddButton = styled.button`
     &:hover{
         background-color: #888888;
         transition: 1s;
+        cursor: pointer;
     }
 `

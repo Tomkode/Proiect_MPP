@@ -27,20 +27,20 @@ test("check add", async ({page}) => {
 
     await expect(page.getByText('Add a new entity')).toBeVisible();
     await page.getByPlaceholder("Name").fill("This is a test entity")
-    await page.getByPlaceholder("Calories").fill("100")
+    await page.getByPlaceholder("Calories").fill("0")
     await page.getByPlaceholder("Fat").fill("10")
     await page.getByPlaceholder("Carbs").fill("20")
     await page.getByPlaceholder("Protein").fill("30")
     await expect(page.getByRole('button', { name: 'Submit' }) ).toBeVisible();
     await page.getByRole('button', { name: 'Submit' }).click();
 
-    await expect(page.getByText('This is a test entity')).toBeVisible();
+    await expect(page.getByText('This is a test entity').first()).toBeVisible();
 })
 
 test("check close button", async ({page}) => {
     await page.goto('localhost:5173/desserts')
 
-    await page.getByText("Frozen Yoghurt").click();
+    await page.getByText("This is a test entity").first().click();
 
     await expect(page.getByText('Edit Entity')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Close' }) ).toBeVisible();
@@ -51,32 +51,12 @@ test("check close button", async ({page}) => {
 })
 
 
-test("check delete button", async ({page}) => {
-    await page.goto('localhost:5173/desserts')
 
-    await page.getByText("Frozen Yoghurt").click();
-
-    await expect(page.getByText('Edit Entity')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Delete entity' }) ).toBeVisible();
-    await page.getByRole('button', { name: 'Delete entity' }).click();
-
-
-    await expect(page.getByText('Nutritional Information')).toBeVisible();
-
-    try{
-        await expect(page.getByText('Frozen yoghurt'))
-
-        await expect(page.getByText('jdfncaoiwjhfgwoinugh'))
-    }
-    catch{
-        return;
-    }
-})
 
 test("check edit go back", async ({page}) => {
     await page.goto('localhost:5173/desserts')
 
-    await page.getByText("Frozen Yoghurt").click();
+    await page.getByText("This is a test entity").first().click();
 
     await expect(page.getByText('Edit Entity')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Edit Entity' }) ).toBeVisible();
@@ -87,6 +67,28 @@ test("check edit go back", async ({page}) => {
     await page.getByRole('button', { name: 'Go back' }).click();
     await expect(page).toHaveURL('http://localhost:5173/desserts')
     
+})
+
+test("check delete button", async ({page}) => {
+    await page.goto('localhost:5173/desserts')
+
+    await page.getByText("This is a test entity").first().click();
+
+    await expect(page.getByText('Edit Entity')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Delete entity' }) ).toBeVisible();
+    await page.getByRole('button', { name: 'Delete entity' }).click();
+
+
+    await expect(page.getByText('Nutritional Information')).toBeVisible();
+
+    try{
+        await expect(page.getByText('This is a test entity'))
+
+        await expect(page.getByText('jdfncaoiwjhfgwoinugh'))
+    }
+    catch{
+        return;
+    }
 })
 
 // test("check edit", async ({page}) => {

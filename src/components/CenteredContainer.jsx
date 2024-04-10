@@ -8,6 +8,8 @@ const CenteredContainer = styled.div`
     :nth-child(n){
         margin-bottom: 15px;
         margin-top: 15px;
+        margin-left: auto;
+        margin-right: auto;
     }
 `
 

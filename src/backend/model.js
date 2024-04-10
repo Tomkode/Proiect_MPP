@@ -1,20 +1,46 @@
+import desserts from './desserts.js';
 let idCounter = 0;
+
 function getNextId(){
   idCounter += 1;
   return idCounter;
 }
-export function createData( name, calories, fat, carbs, protein) {
+
+function random_choose(arr, n) {
+  const shuffled = arr.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+export function decrementId(){
+  idCounter -= 1;
+  
+}
+function createData( name, calories, fat, carbs, protein) {
   let id = getNextId();
     return { id, name, calories, fat, carbs, protein };
   }
 
-  export function returnEntities(){
-    let hardcoded = [];
-    hardcoded.push(createData('Frozen yoghurt', 159, 6.0, 24, 4.0))
-  hardcoded.push(createData('Ice cream sandwich', 50, 9.0, 37, 4.3))
-  hardcoded.push(createData('Eclair', 262, 16.0, 24, 6.0))
-  hardcoded.push(createData('Cupcake', 240, 3.7, 67, 4.3))
-  hardcoded.push(createData('Gingerbread', 128, 16.0, 49, 3.9))
-  return hardcoded;
+function returnEntities(count){
+    let chosen = random_choose(desserts, count);
+    let repo = []
+    chosen.forEach((element) => {
+      let obj = createData(element, Math.floor(Math.random() * 1000), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100), Math.floor(Math.random() * 100));
+      repo.push(obj);
+    });
+  return repo;
   }
-  export let repository = returnEntities();
+  
+  export let repository = returnEntities(2);
+
+  export function generateAndAddEntities(count){
+    let newEntities = returnEntities(count);
+    repository = repository.concat(newEntities);
+  }
+  export function addEntity(obj){
+    let id = getNextId();
+    obj.id = id;
+    repository.push(obj);
+
+  }
+
+  

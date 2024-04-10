@@ -2,8 +2,30 @@ import {styled} from "styled-components"
 import DeleteButton from "./DeleteButton"
 import { useNavigate } from "react-router-dom"
 import { StyledBox } from "./StyledView"
-export const EditPanel = ({edited ,closeButton, saveButton, updateEditEntity}) => {
+export const EditPanel = ({view}) => {
     const navigate = useNavigate();
+    let edited = view
+    const updateEditEntity = (evt) => {
+        let field = evt.currentTarget.id;
+        edited[field] = evt.currentTarget.value;
+      }
+    const saveButtonClicked = () => {
+        // let newEntities = [...entities]
+        // let index = newEntities.findIndex((element) => element.id === editEntity.id)
+        // console.log(index)
+        // newEntities[index] = editEntity
+        // setEntities(newEntities)
+        fetch(`http://localhost:5123/dessert/edit/${edited.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(edited)
+        
+    })
+    .catch((error) => {alert("A server error occured")})
+        //closeButton()
+      };
     if(edited.name == "" && edited.calories == -1 && edited.fat == -1 && edited.protein == -1 && edited.carbs == -1)
         return ( <></>)
     return (<StyledBox>
@@ -21,7 +43,7 @@ export const EditPanel = ({edited ,closeButton, saveButton, updateEditEntity}) =
             navigate('/desserts')
             }}>Go Back</DeleteButton>
         <DeleteButton onClick = {() => {
-            saveButton();
+            saveButtonClicked();
             navigate('/desserts')
         }}>
             Save

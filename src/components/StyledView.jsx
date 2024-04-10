@@ -1,10 +1,28 @@
 import {styled} from "styled-components"
 import DeleteButton from "./DeleteButton"
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-export const StyledView = ({view, closeButton, deleteButton}) => {
+export const StyledView = ({view, setView, deleteButton}) => {
     const navigate = useNavigate();
-    if(view.name == "" && view.calories == -1 && view.fat == -1 && view.protein == -1 && view.carbs == -1)
-        return ( <></>)
+    let urlString = window.location.href
+    let id = urlString.split("/").pop()
+    //console.log(id)
+    useEffect( () => {
+        fetchData();
+    }, [])
+    const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:5123/dessert/details/${id}`).catch((error) => {alert("A server error occured")});
+          const result = await response.json();
+          //console.log(result)
+          setView(result);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      if(view.name == "" && view.calories == -1 && view.fat == -1 && view.carbs == -1 && view.protein == -1){
+        return <h2>Invalid id</h2>;
+      }
     return (<StyledBox>
         Name: {view.name}
         <hr></hr>
@@ -17,7 +35,6 @@ export const StyledView = ({view, closeButton, deleteButton}) => {
         Protein: {view.protein}g
         <hr></hr>
         <DeleteButton onClick = {() => {
-            closeButton();
             navigate('/desserts')
             }}>Close</DeleteButton>
         <DeleteButton onClick = {() => {
@@ -27,7 +44,7 @@ export const StyledView = ({view, closeButton, deleteButton}) => {
             Delete entity
         </DeleteButton>
         <DeleteButton onClick = { () => {
-
+            
             navigate('/dessert/edit')
         }}>
             Edit Entity

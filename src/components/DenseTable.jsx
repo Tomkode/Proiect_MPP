@@ -31,15 +31,15 @@ export default function DenseTable({state, view, rowClicked, pageState}) {
         <TableBody>
           {state.sort((ob1,ob2) => ob1.calories - ob2.calories).filter( (row, index) => {
             return index >= (currentPage-1) * pageLength && index < currentPage * pageLength
-          }).map((row, index) => (
+          }).map((row) => (
             
             <TableRow 
-              key={row.name}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 },
             '&:hover': {cursor: 'pointer'} }}
               onClick = { () => {
-                rowClicked(index + (currentPage-1) * pageLength);
-                navigate('/dessert/details')} }
+                //rowClicked(index + (currentPage-1) * pageLength);
+                navigate(`/dessert/details/${row.id}`)} }
             >
               <TableCell component="th" scope="row">
                 {row.name}
