@@ -1,9 +1,11 @@
-import {repository, addEntity, decrementId, generateAndAddEntities} from "./model.js"
+import {addDessert, dessertRepository, addRestaurant, restaurantRepository, deleteDessert, deleteRestaurant, editDessert, editRestaurant, getDesserts, getRestaurants} from './controller.js';
+import {generateAndAddDesserts} from './model.js';
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'; // Import the cors package
 import {Server} from 'socket.io'
-import http from 'http'
+import http, { get } from 'http'
+
 const app = express()
 const port = 5123;
 app.use(bodyParser.json());
@@ -25,37 +27,38 @@ app.get('/', (req, res) => {
 
 app.get('/desserts', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
-    res.send(JSON.stringify(repository));
+    //console.log(dessertRepository)
+    res.send(JSON.stringify(dessertRepository));
 });
 app.options('/dessert/add', cors()); // Enable pre-flight request for POST
 app.post('/dessert/add', cors(), (req, res) => {
     // res.set('Access-Control-Allow-Origin', '*');
     // res.set('Access-Control-Allow-Headers', 'Content-Type');
     // console.log(req.body);
-    addEntity(req.body);
+    addDessert(req.body);
+    getDesserts();
     res.send('Entity added');
 });
 app.get('/dessert/details/:id', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let id = parseInt(req.params.id);
-    let entity = repository.find((element) => element.id === id);
+    let entity = dessertRepository.find((element) => element.id === id);
     res.send(entity);
 });
 app.delete('/dessert/delete/:id', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let id = parseInt(req.params.id);
-    let index = repository.findIndex((element) => element.id === id);
-    repository.splice(index, 1);
+    deleteDessert(id);
     res.send('Entity deleted');
-    decrementId();
+    getDesserts();
 })
 app.options('/dessert/edit/:id', cors());
 app.put('/dessert/edit/:id', cors(),  (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     let id = parseInt(req.params.id);
-    let index = repository.findIndex((element) => element.id === id);
-    repository[index] = req.body;
+    editDessert(id, req.body);
     res.send('Entity updated');
+    getDesserts();
 })
 
 
@@ -70,7 +73,8 @@ io.on('connection', (socket) => {
     socket.on("startgenerating", () => {
         console.log("generating")
         intervalId = setInterval(() => {
-            generateAndAddEntities(1);
+            generateAndAddDesserts(1);
+            getDesserts();
             io.emit('generated');
         }, 5000)
     })
@@ -81,5 +85,38 @@ io.on('connection', (socket) => {
 });
 
 
-
+app.get('/restaurants', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.send(JSON.stringify(restaurantRepository));
+});
+app.options('/restaurant/add', cors()); // Enable pre-flight request for POST
+app.post('/restaurant/add', cors(), (req, res) => {
+    // res.set('Access-Control-Allow-Origin', '*');
+    // res.set('Access-Control-Allow-Headers', 'Content-Type');
+    // console.log(req.body);
+    addRestaurant(req.body);
+    res.send('Entity added');
+    getRestaurants();
+});
+app.get('/restaurant/details/:id', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = parseInt(req.params.id);
+    let entity = restaurantRepository.find((element) => element.id === id);
+    res.send(entity);
+});
+app.delete('/restaurant/delete/:id', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = parseInt(req.params.id);
+    deleteRestaurant(id);
+    res.send('Entity deleted');
+    getRestaurants();
+})
+app.options('/restaurant/edit/:id', cors());
+app.put('/restaurant/edit/:id', cors(),  (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = parseInt(req.params.id);
+    editRestaurant(id, req.body);
+    res.send('Entity updated');
+    getRestaurants();
+})
 server.listen(port)

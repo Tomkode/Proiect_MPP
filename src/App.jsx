@@ -24,7 +24,9 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     async function f(){
       await fetch('http://localhost:5123/desserts')
       
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response.body)
+        return response.json()})
       .then( (data) => {
         setEntities(data)
       
