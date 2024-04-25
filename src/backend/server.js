@@ -51,6 +51,7 @@ app.delete('/dessert/delete/:id', (req, res) => {
     deleteDessert(id);
     res.send('Entity deleted');
     getDesserts();
+    getRestaurants()
 })
 app.options('/dessert/edit/:id', cors());
 app.put('/dessert/edit/:id', cors(),  (req, res) => {

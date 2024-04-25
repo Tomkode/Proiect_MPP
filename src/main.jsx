@@ -54,7 +54,11 @@ import { EditPanel } from "./components/EditPanel";
     setNewEntity(newNewEntity)
   }
   const deleteButtonClicked = (id) => {
-    fetch(`http://localhost:5123/dessert/delete/${id}`, {
+    let url = `http://localhost:5123/dessert/delete/${id}`
+    if(selectedEntity == 'restaurant'){
+      url = `http://localhost:5123/restaurant/delete/${id}`
+    }
+    fetch(url, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json'
@@ -86,6 +90,7 @@ import { EditPanel } from "./components/EditPanel";
     newTablePages.currentPage = 1
     setTablePages(newTablePages)
   }
+  const [selectedEntity, setSelectedEntity] = useState('dessert')
   const router = createBrowserRouter([
     {
       path: "/",
@@ -93,20 +98,32 @@ import { EditPanel } from "./components/EditPanel";
     },
     {
       path: "desserts",
-      element: <App updateItemsPerPage = {updateItemsPerPage} viewState={viewState} entities = {entities} setEntities = {setEntities}
-      rowClicked = {rowClicked} increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
+      element: <App selectedEntity = {selectedEntity} setSelectedEntity = {setSelectedEntity} updateItemsPerPage = {updateItemsPerPage}  entities = {entities} setEntities = {setEntities}
+       increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
     },
     {
       path: "dessert/add",
-      element: <AddEntityPage newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
+      element: <AddEntityPage selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
     },
     {
       path: '/dessert/details/:id',
-      element: <StyledView view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
+      element: <StyledView selectedEntity= {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
     },
     {
       path: '/dessert/edit',
-      element: <EditPanel  view = {viewState}  ></EditPanel>
+      element: <EditPanel selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
+    },
+    {
+      path: "restaurant/add",
+      element: <AddEntityPage selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
+    },
+    {
+      path: '/restaurant/details/:id',
+      element: <StyledView selectedEntity = {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
+    },
+    {
+      path: '/restaurant/edit',
+      element: <EditPanel selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
     }
   ]);
 

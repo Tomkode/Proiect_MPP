@@ -16,13 +16,18 @@ const socket = io('http://localhost:5123', {
   autoConnect: false
 })
 socket.open()
-function App({entities, setEntities, viewState, rowClicked, increasePage, decreasePage, pageState, updateItemsPerPage}) {
+function App({entities, selectedEntity, setSelectedEntity, setEntities, increasePage, decreasePage, pageState, updateItemsPerPage}) {
   // -------------- The state with the table entries
   //console.log(pageState)
   const [generating, setGenerating] = useState(false)
+  
+  let url = 'http://localhost:5123/desserts'
+  if(selectedEntity === 'restaurant'){
+    url = 'http://localhost:5123/restaurants'
+  }
   useEffect( () => {
     async function f(){
-      await fetch('http://localhost:5123/desserts')
+      await fetch(url)
       
       .then((response) => {
         console.log(response.body)
@@ -58,6 +63,7 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     setGenerating(!generating)
   }
   let chartData = []
+  if( selectedEntity === 'dessert'){
   for(let i = 0; i < entities.length; i++){
     chartData.push({
       id: i,
@@ -66,12 +72,46 @@ function App({entities, setEntities, viewState, rowClicked, increasePage, decrea
     
     })
   }
+}
+  else {
+    for(let i = 0; i < entities.length; i++){
+      chartData.push({
+        id: i,
+        value: entities[i].housingSpace,
+        label: entities[i].name
+      
+      })
+    }
+  }
 
+  const toggleEntity = async () => {
+    if(selectedEntity === 'dessert'){
+      setSelectedEntity('restaurant')
+      await fetch('http://localhost:5123/restaurants')
+      .then((response) => response.json())
+      .then( (data) => {
+        setEntities(data)
+        
+      })
+      .catch((error) => {alert("A server error occured")})
+    }else{
+      setSelectedEntity('dessert')
+      await fetch('http://localhost:5123/desserts')
+      .then((response) => response.json())
+      .then( (data) => {
+        setEntities(data)
+        
+      })
+      .catch((error) => {alert("A server error occured")})
+    }
+  }
   return (
     <CenteredContainer>
     <h1> Nutritional Information</h1>
+    <AddButton onClick = {toggleEntity}> Switch Entity</AddButton>
+    <br></br>
     <Link to = "/dessert/add"><AddButton> Add Entity</AddButton></Link>
-    <DenseTable state = {entities} view = {viewState} rowClicked = {rowClicked} pageState = {pageState}></DenseTable>
+    <DenseTable state = {entities} selectedEntity = {selectedEntity}  pageState = {pageState}></DenseTable>
     <p> Current page : {pageState.currentPage}</p>
     <AddButton onClick = {decreasePage}>Previous Page</AddButton>
     <AddButton onClick = {increasePage} >Next Page</AddButton>
