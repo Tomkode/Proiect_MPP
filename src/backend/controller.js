@@ -4,20 +4,20 @@ import fs from 'node:fs'
 import mysql from 'mysql'
 // import bcrypt from 'bcryptjs'
 import CryptoJS from 'crypto-js'
-export const connection = mysql.createConnection({
-
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'MPP'
-})
 // export const connection = mysql.createConnection({
-//     host: "mpp.chy0oiuwuiec.eu-north-1.rds.amazonaws.com",
-//     port: "3306",
-//     user: "root",
-//     password: "Password1",
-//     database: "mpp"
-//   });
+
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'MPP'
+// })
+export const connection = mysql.createConnection({
+    host: "mppdb.c94u2ewygiqj.eu-north-1.rds.amazonaws.com",
+    port: "3306",
+    user: "root",
+    password: "Admin69!",
+    database: "MPP"
+  });
 export let dessertRepository
 export let restaurantRepository 
 await getDesserts();
