@@ -3,6 +3,7 @@ import { StyledBox } from "./StyledView";
 import { AddButton } from "./AddButton";
 import {Link} from 'react-router-dom'
 import {useEffect} from 'react'
+import Cookies from 'js-cookie'
 // import { update } from "../viewSlice";
 
 
@@ -46,6 +47,8 @@ const AddEntityPage = ({selectedEntity, updateNewEntity, newEntity}) => { // sub
 
         .catch(error => console.log(error))
     }
+    if(Cookies.get("token") == undefined)
+        return (<>You must log in!</>)
     if(selectedEntity == 'dessert')
         return (
             <StyledBox width = {50} height = {80} >

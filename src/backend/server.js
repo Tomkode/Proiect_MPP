@@ -1,5 +1,6 @@
 import {addDessert, dessertRepository, addRestaurant, restaurantRepository, deleteDessert, deleteRestaurant, editDessert, editRestaurant, getDesserts, getRestaurants} from './controller.js';
 import {generateAndAddDesserts} from './model.js';
+import { registerUser , loginUser, checkUser, getUser} from './controller.js';
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'; // Import the cors package
@@ -38,6 +39,33 @@ app.post('/dessert/add', cors(), (req, res) => {
     addDessert(req.body);
     getDesserts();
     res.send('Entity added');
+});
+app.post('/register', cors(), async (req, res) => {
+    // res.set('Access-Control-Allow-Origin', '*');
+    // res.set('Access-Control-Allow-Headers', 'Content-Type');
+    // console.log(req.body);
+    let id = await checkUser(req.body);
+    console.log(id.length);
+    if(id.length != 0)
+    {
+        res.send("error");
+        return ;
+    }
+    registerUser(req.body);
+    res.send('User registered');
+});
+app.post("/login",async  (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = await loginUser(req.body);
+    //console.log(id)
+    res.send(id);
+})
+app.get("/user/:id", async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    let id = parseInt(req.params.id);
+    let user = await getUser(id);
+    //console.log(user)
+    res.send(user);
 });
 app.get('/dessert/details/:id', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');

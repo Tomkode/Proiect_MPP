@@ -2,6 +2,7 @@ import {styled} from "styled-components"
 import DeleteButton from "./DeleteButton"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import Cookies from 'js-cookie'
 export const StyledView = ({view, setView, deleteButton, selectedEntity}) => {
     const navigate = useNavigate();
     let urlString = window.location.href
@@ -24,6 +25,8 @@ export const StyledView = ({view, setView, deleteButton, selectedEntity}) => {
           console.error('Error fetching data:', error);
         }
       };
+      if(Cookies.get("token") == undefined)
+    return (<>You must log in!</>)
       if(view.name == "" && view.calories == -1 && view.fat == -1 && view.carbs == -1 && view.protein == -1){
         return <h2>Invalid id</h2>;
       }

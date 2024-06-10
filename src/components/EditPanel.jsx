@@ -2,6 +2,7 @@ import {styled} from "styled-components"
 import DeleteButton from "./DeleteButton"
 import { useNavigate } from "react-router-dom"
 import { StyledBox } from "./StyledView"
+import Cookies from 'js-cookie'
 export const EditPanel = ({selectedEntity,view}) => {
     const navigate = useNavigate();
     let edited = view
@@ -30,6 +31,8 @@ export const EditPanel = ({selectedEntity,view}) => {
     .catch((error) => {alert("A server error occured")})
         //closeButton()
       };
+      if(Cookies.get("token") == undefined)
+    return (<>You must log in!</>)
     if(edited.name == "" && edited.calories == -1 && edited.fat == -1 && edited.protein == -1 && edited.carbs == -1)
         return ( <></>)
     if(selectedEntity == 'dessert')

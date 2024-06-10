@@ -11,12 +11,13 @@ import {Link} from 'react-router-dom'
 import { PieChart } from '@mui/x-charts/PieChart';
 import { legendClasses } from '@mui/x-charts'
 import {io} from 'socket.io-client'
+import Cookies from 'js-cookie'
 const socket = io('http://localhost:5123', {
   transports: ['websocket'],
   autoConnect: false
 })
 socket.open()
-function App({entities, selectedEntity, setSelectedEntity, setEntities, increasePage, decreasePage, pageState, updateItemsPerPage}) {
+function App({token, setToken, entities, selectedEntity, setSelectedEntity, setEntities, increasePage, decreasePage, pageState, updateItemsPerPage}) {
   // -------------- The state with the table entries
   //console.log(pageState)
   const [generating, setGenerating] = useState(false)
@@ -105,9 +106,13 @@ function App({entities, selectedEntity, setSelectedEntity, setEntities, increase
       .catch((error) => {alert("A server error occured")})
     }
   }
+  if(Cookies.get("token") == undefined)
+    return (<>You must log in!</>)
   return (
     <CenteredContainer>
     <h1> Nutritional Information</h1>
+    <Link to = "/user"><AddButton>User</AddButton></Link>
+    <br></br>
     <AddButton onClick = {toggleEntity}> Switch Entity</AddButton>
     <br></br>
     <Link to = "/dessert/add"><AddButton> Add Entity</AddButton></Link>

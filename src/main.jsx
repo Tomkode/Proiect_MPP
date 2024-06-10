@@ -10,6 +10,10 @@ import {useState} from 'react'
 import { StyledView } from "./components/StyledView";
 import {redirect} from 'react-router-dom'
 import { EditPanel } from "./components/EditPanel";
+import { Login } from "./components/Login";
+import { Navigate } from "react-router-dom";
+import { Register } from "./components/Register";
+import { UserDetails } from "./components/UserDetails";
 //console.log(initialState)
   const Main = () => {
 
@@ -53,6 +57,7 @@ import { EditPanel } from "./components/EditPanel";
     newNewEntity[field] = evt.currentTarget.value;
     setNewEntity(newNewEntity)
   }
+  const [token, setToken] = useState("")
   const deleteButtonClicked = (id) => {
     let url = `http://localhost:5123/dessert/delete/${id}`
     if(selectedEntity == 'restaurant'){
@@ -94,36 +99,49 @@ import { EditPanel } from "./components/EditPanel";
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <GreetPage />,
+      //element: <GreetPage />,
+      element: <Navigate to = "/login" />,
+    },
+    {
+      path: "login",
+      element: <Login token = {token} setToken = {setToken}/>,
+    },
+    {
+      path: "register",
+      element: <Register token = {token} setToken = {setToken}></Register>
     },
     {
       path: "desserts",
-      element: <App selectedEntity = {selectedEntity} setSelectedEntity = {setSelectedEntity} updateItemsPerPage = {updateItemsPerPage}  entities = {entities} setEntities = {setEntities}
+      element: <App token = {token} setToken = {setToken} selectedEntity = {selectedEntity} setSelectedEntity = {setSelectedEntity} updateItemsPerPage = {updateItemsPerPage}  entities = {entities} setEntities = {setEntities}
        increasePage={nextPage} decreasePage={prevPage} pageState = {tablePages}/>,
     },
     {
       path: "dessert/add",
-      element: <AddEntityPage selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
+      element: <AddEntityPage token = {token} setToken = {setToken} selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
     },
     {
       path: '/dessert/details/:id',
-      element: <StyledView selectedEntity= {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
+      element: <StyledView token = {token} setToken = {setToken} selectedEntity= {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
     },
     {
       path: '/dessert/edit',
-      element: <EditPanel selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
+      element: <EditPanel token = {token} setToken = {setToken} selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
     },
     {
       path: "restaurant/add",
-      element: <AddEntityPage selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
+      element: <AddEntityPage token = {token} setToken = {setToken} selectedEntity = {selectedEntity} newEntity = {newEntity} updateNewEntity = {updateNewEntity} /*submitButtonClicked = {submitButtonClicked}*//>,
     },
     {
       path: '/restaurant/details/:id',
-      element: <StyledView selectedEntity = {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
+      element: <StyledView token = {token} setToken = {setToken} selectedEntity = {selectedEntity} view = {viewState} setView = {setView} deleteButton = {deleteButtonClicked}></StyledView>
     },
     {
       path: '/restaurant/edit',
-      element: <EditPanel selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
+      element: <EditPanel token = {token} setToken = {setToken} selectedEntity = {selectedEntity} view = {viewState}  ></EditPanel>
+    },
+    {
+      path: "user",
+      element: <UserDetails></UserDetails>
     }
   ]);
 
